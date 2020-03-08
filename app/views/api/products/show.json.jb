@@ -12,5 +12,7 @@
   speed: @product.speed,
   year: @product.year,
   label: @product.label,
-
+  is_discounted: @product.is_discounted?,
+  tax: @product.tax,
+  total: @product.total,
 }
