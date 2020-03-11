@@ -1,6 +1,23 @@
 class Api::ProductsController < ApplicationController
   def index
     @products = Product.all
+
+    if params[:search]
+      @products = @products.where("name ILIKE ?", "%#{params[:search]}%")
+    end
+
+    if params[:discounted]
+      @products = @products.where("price < 30")
+    end
+
+    if params[:sort] == "price" && params[:sort_order] == "asc"
+      @products = @products.order(price: :asc)
+    elsif params[:sort] == "price" && params[:sort_order] == "desc"
+      @products = @products.order(price: :desc)
+    else
+      @products = @products.order(:id => :asc)
+    end
+
     render "index.json.jb"
   end
 
@@ -19,8 +36,11 @@ class Api::ProductsController < ApplicationController
       year: params[:year],
       label: params[:label],
     )
-    @product.save
-    render "show.json.jb"
+    if @product.save
+      render "show.json.jb"
+    else
+      render json: { errors: @product.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   def show
@@ -42,8 +62,12 @@ class Api::ProductsController < ApplicationController
     @product.speed = params[:size] || @product.speed
     @product.year = params[:year] || @product.year
     @product.label = params[:label] || @product.label
-    @product.save
-    render "show.json.jb"
+
+    if @product.save
+      render "show.json.jb"
+    else
+      render json: { errors: @product.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   def destroy
