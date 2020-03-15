@@ -2,7 +2,6 @@
   id: product.id,
   name: product.name,
   price: product.price,
-  image_url: product.image_url,
   description: product.description,
   color: product.color,
   weight: product.weight,
@@ -16,7 +15,7 @@
   tax: product.tax,
   total: product.total,
   supplier_id: product.supplier_id,
-  image: product.image,
+  images: product.images,
   formatted: {
     price: number_to_currency(product.price),
     tax: number_to_currency(product.tax),
