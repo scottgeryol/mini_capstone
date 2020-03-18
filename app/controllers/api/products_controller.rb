@@ -1,4 +1,6 @@
 class Api::ProductsController < ApplicationController
+  before_action :authenticate_admin, except: [:index, :show]
+
   def index
     @products = Product.all
 
@@ -25,7 +27,7 @@ class Api::ProductsController < ApplicationController
     @product = Product.new(
       name: params[:name],
       price: params[:price],
-      image_url: params[:image_url],
+      # image_url: params[:image_url],
       description: params[:description],
       color: params[:color],
       weight: params[:weight],
@@ -37,6 +39,7 @@ class Api::ProductsController < ApplicationController
       label: params[:label],
     )
     if @product.save
+      Image.create(url: params["image_url"], product_id: @product.id)
       render "show.json.jb"
     else
       render json: { errors: @product.errors.full_messages }, status: :unprocessable_entity
