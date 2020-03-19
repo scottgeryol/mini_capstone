@@ -16,6 +16,7 @@
   total: product.total,
   supplier_id: product.supplier_id,
   images: product.images,
+  categories: product.categories,
   formatted: {
     price: number_to_currency(product.price),
     tax: number_to_currency(product.tax),
